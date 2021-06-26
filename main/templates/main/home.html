@@ -1,0 +1,143 @@
+{% extends 'main/index.html' %}
+{% load static %}
+
+{% block categories_section %}
+<!-- Categories Section Begin -->
+<section class="categories">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 p-0">
+                <div class="categories__item categories__large__item set-bg"
+                data-setbg="{% static 'main/img/categories/category-1.png' %}">
+                <div class="categories__text">
+                    <h1>Women’s fashion</h1>
+                    <p>Dress shabbily and they remember the dress; dress impeccably <br/>and they remember the woman</p>
+                    <a href="{% url 'shop' %}?category=women">Shop now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                    <div class="categories__item set-bg" data-setbg="{% static 'main/img/categories/category-2.png' %}">
+                        <div class="categories__text">
+                            <h4>Men’s fashion</h4>
+                            <p>358 items</p>
+                            <a href="{% url 'shop' %}?category=men">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                    <div class="categories__item set-bg" data-setbg="{% static 'main/img/categories/category-3.png' %}">
+                        <div class="categories__text">
+                            <h4>Kid’s fashion</h4>
+                            <p>273 items</p>
+                            <a href="{% url 'shop' %}?category=kids">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                    <div class="categories__item set-bg" data-setbg="{% static 'main/img/categories/category-4.png' %}">
+                        <div class="categories__text">
+                            <h4>Casual attires</h4>
+                            <p>159 items</p>
+                            <a href="{% url 'shop' %}?type=casual">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                    <div class="categories__item set-bg" data-setbg="{% static 'main/img/categories/category-5.png' %}">
+                        <div class="categories__text">
+                            <h4>Cooperate attires</h4>
+                            <p>792 items</p>
+                            <a href="{% url 'shop' %}?type=cooperate">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- Categories Section End -->
+
+{% endblock categories_section %}
+
+{% block product_section %}
+<!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="section-title">
+                    <h4>New product</h4>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <ul class="filter__controls">
+                    <li class="active" data-filter="*">All</li>
+                    <li data-filter=".women">Women’s</li>
+                    <li data-filter=".men">Men’s</li>
+                    <li data-filter=".kid">Kid’s</li>
+                    <li data-filter=".casual">Casual</li>
+                    <li data-filter=".cooperate">Cooperate</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row property__gallery">
+        {% for product in products %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mix {{product.category|lower}} {{product.productType|lower}}">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="{{product.image.url}}">
+                    {% if product.label %}
+                        <div class="label {{product.labelColor}}">{{product.label}}</div>
+                    {% endif %}
+                        <ul class="product__hover">
+                            <li><a href="{{product.image.url}}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'add-to-cart' product.pk %}?path={{path}}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-detail' product.category|lower product.pk %}">{{product.name}}</a></h6>
+                        <div class="rating">
+                        {% for rating in product.ratingList %}
+                            <i class="fa fa-star"></i>
+                        {% endfor %}
+                        </div>
+                        <div class="product__price"><span><img src="{% static 'main/icons/naira.png' %}" class="naira"></span> {{product.price}}</div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+        <p class="text-center text-uppercase font-italic font-weight-bold">No new products</p>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Product Section End -->
+
+{% endblock product_section %}
+
+{% block banner_section %}
+<!-- Banner Section Begin -->
+<section class="banner set-bg" data-setbg="{% static 'main/img/banner/banner.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-7 col-lg-8 m-auto">
+
+                    <div class="banner__item center text-center" style="margin-top: 25%;">
+                        <div class="banner__text">
+                            <span>The La-moda Collection</span>
+                            <h1>Latest Trends</h1>
+                            <a href="{% url 'shop' %}">Shop now</a>
+                        </div>
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Banner Section End -->
+
+{% endblock banner_section %}

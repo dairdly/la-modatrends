@@ -1,0 +1,183 @@
+{% extends 'main/index.html' %}
+
+{% load static %}
+
+{% block twitter_meta_tags %}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@la_modaTrend">
+<meta name="twitter:title" content="{{product.name}}">
+<meta name="twitter:description" content="{{product.description}}">
+<meta name="twitter:creator" content="@la_modaTrend">
+<meta name="twitter:image" content="{{domain}}{{product.image.url}}">
+<meta name="twitter:domain" content="{{domain}}">
+
+{% endblock twitter_meta_tags %}
+
+{% block facebook_meta_tags %}
+
+<meta property="og:url" content="{{domain}}{{path}}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{product.name}}" />
+<meta property="og:description" content="{{product.description}}" />
+<meta property="og:image" content="{{domain}}{{product.image.url}}" />
+
+{% endblock facebook_meta_tags %}
+
+{% block facebook_sdk %}
+<!-- Load Facebook SDK for JavaScript -->
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '1706235486214058',
+            autoLogAppEvents: true,
+            xfbml: true,
+            version: 'v9.0'
+        });
+    };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+{% endblock facebook_sdk %}
+
+{% block pinterest_js %}
+
+<script async defer src="//assets.pinterest.com/js/pinit.js"></script>
+
+{% endblock pinterest_js%}
+
+{% block breadcrumbs_section %}
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                    <a href="#">Women’s </a>
+                    <span>{{product.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+{% endblock breadcrumbs_section %}
+
+{% block main_content %}
+<!-- Product Details Section Begin -->
+<section class="product-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="product__details__pic">
+                    <div class="product__details__slider__content">
+                        <div class="product__details__pic__slider owl-carousel">
+                            <img data-hash="product-1" class="product__big__img" src="{{product.image.url}}" alt="">
+                            <img data-hash="product-2" class="product__big__img" src="{{product.image.url}}" alt="">
+                            <img data-hash="product-3" class="product__big__img" src="{{product.image.url}}" alt="">
+                            <img data-hash="product-4" class="product__big__img" src="{{product.image.url}}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="product__details__text">
+                    <h3>{{product.name}} <span></span></h3>
+                    <div class="rating">
+                        {% for n in product.ratingList %}
+                        <i class="fa fa-star"></i>
+                        {% endfor %}
+                        <span>(
+                            <script>document.write(Math.floor(Math.random() * 200) + 50)</script> reviews )
+                        </span>
+                    </div>
+
+                    <div class="product__details__price"><span><img src="{% static 'main/icons/naira.png' %}"
+                                class="naira"></span> {{product.price}} <span></span></div>
+                    <p>{{product.description}}</p>
+                    <div class="product__details__button">
+                        <div class="quantity">
+                            <span>Quantity:</span>
+                            <div class="pro-qty">
+                                <input type="text" value="1">
+                            </div>
+                        </div>
+                        <a href="{% url 'add-to-cart' product.pk %}?path={{path}}" class="cart-btn"><span
+                                class="icon_bag_alt"></span> Add to cart</a>
+                    </div>
+                    <div class="product__details__widget">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="share_text">Share on: </p>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li><a onclick='facebookShare("{{domain}}{{path}}")'><i
+                                                class="btn btn-outline-primary btn-lg btn-block fa fa-facebook"></i></a>
+                                    </li>
+                                    <li>
+                                        <div class='row'>
+                                            <div class='col-6 justify-content-center'><a href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+                                                    class="mx-auto center text-center twitter-share-button" data-show-count="false"></a>
+                                                <script async src="https://platform.twitter.com/widgets.js"
+                                                    charset="utf-8"></script>
+                                            </div>
+
+                                            <div class='col-6 justify-content-center'>
+                                                <a class='mx-auto center text-center pinterest-share-button' data-pin-do="buttonPin"
+                                                    href="https://www.pinterest.com/pin/create/button/?media={{domain}}{{product.image.url}}?description={{product.description}}"></a>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-12 text-center">
+            <div class="related__title">
+                <h5>RELATED PRODUCTS</h5>
+            </div>
+        </div>
+        {% for product in similiar_products %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="product__item">
+                <div class="product__item__pic set-bg" data-setbg="{{product.image.url}}">
+                    {% if product.label %}
+                    <div class="label {{product.labelColor}}">{{product.label}}</div>
+                    {% endif %}
+                    <ul class="product__hover">
+                        <li><a href="{{product.image.url}}" class="image-popup"><span class="arrow_expand"></span></a>
+                        </li>
+                        <li><a href="{% url 'add-to-cart' product.pk %}?path={{path}}"><span
+                                    class="icon_bag_alt"></span></a></li>
+                    </ul>
+                </div>
+                <div class="product__item__text">
+                    <h6><a href="{% url 'product-detail' product.category|lower product.pk %}">{{product.name}}</a>
+                    </h6>
+                    <div class="rating">
+                        {% for rating in product.ratingList %}
+                        <i class="fa fa-star"></i>
+                        {% endfor %}
+                    </div>
+                    <div class="product__price"><span><img src="{% static 'main/icons/naira.png' %}"
+                                class="naira"></span> {{product.price}}</div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+        <p>No related products</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+<!-- Product Details Section End -->
+{% endblock main_content %}

@@ -1,0 +1,100 @@
+{% extends 'main/index.html' %}
+
+{% load static %}
+{% block breadcrumbs_section %}
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                    <span>Shopping cart</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+{% endblock breadcrumbs_section %}
+
+{% block main_content %}
+<!-- Shop Cart Section Begin -->
+<section class="shop-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr class="cartRow" onclick='setProductTotal(this)'>
+                                <td class="cart__product__item">
+                                    <img src="{{ item.product.image}}" alt="">
+                                    <div class="cart__product__item__title">
+                                        <h6><a href="{% url 'product-detail' item.product.category|lower item.product.pk %}">{{ item.product.name}}</a></h6>
+                                        <div class="rating">
+                                            {% for n in item.product.ratingList %}
+                                            <i class="fa fa-star"></i>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart__price"><span><img src="{% static 'main/icons/naira.png' %}" class="naira"></span> <span>{{ item.product.price}}</span></td>
+                                <td class="cart__quantity">
+                                    <div class="pr-qty" onclick='quantity(this)'>
+                                        <span class="dec qtybtn">-</span>
+                                        <input type="text" value="{{ item.qty}}" />
+                                        <span class="inc qtybtn">+</span>
+                                    </div>
+                                </td>
+                                <td class="cart__total"><span><img src="{% static 'main/icons/naira.png' %}" class="naira"></span> <span class="total">{{ item.cost}}</span></td>
+                                <td class="cart__close"><a href="{% url 'remove-from-cart' item.pk %}?path={{path}}"><span class="icon_close"></span></a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td>
+                                    <p class="text-center text-uppercase font-italic font-weight-bold">Cart is empty</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn">
+                    <a href="{% url 'shop' %}">Continue Shopping</a>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                <div class="cart__total__procced">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Total <span class='cartTotal'>{{user.totalCost}}</span> <span><img src="{% static 'main/icons/naira.png' %}" class="naira"></span> </li>
+                    </ul>
+                    <a href="{% url 'checkout' %}" class="primary-btn" onclick=sendAmount()>Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Cart Section End -->
+{% endblock main_content %}

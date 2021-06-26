@@ -1,0 +1,109 @@
+{% extends 'main/index.html' %}
+
+{% load static %}
+{% block breadcrumbs_section %}
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                    <span>Shop</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+{% endblock breadcrumbs_section %}
+
+{% block main_content %}
+<!-- Shop Section Begin -->
+<section class="shop spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="shop__sidebar">
+                    <div class="sidebar__categories">
+                        <div class="section-title">
+                            <h4>Categories</h4>
+                        </div>
+                        <div class="categories__accordion">
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'shop' %}?category=women" id="women"
+                                    class="list-group-item list-group-item-action" onclick="setActive(this)">Women</a>
+                                <a href="{% url 'shop' %}?category=men" id="men"
+                                    class="list-group-item list-group-item-action" onclick="setActive(this)">Men</a>
+                                <a href="{% url 'shop' %}?category=kids" id="kids"
+                                    class="list-group-item list-group-item-action" onclick="setActive(this)">Kids</a>
+                                <a href="{% url 'shop' %}?type=cooperate" id="cooperate"
+                                    class="list-group-item list-group-item-action"
+                                    onclick="setActive(this)">Cooperate</a>
+                                <a href="{% url 'shop' %}?type=casual" id="casual"
+                                    class="list-group-item list-group-item-action" onclick="setActive(this)">Casual</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9">
+                <div class="row">
+                    {% for product in products %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="{{product.image.url}}">
+                                {% if product.label %}
+                                <div class="label {{product.labelColor}}">{{product.label}}</div>
+                                {% endif %}
+                                <ul class="product__hover">
+                                    <li><a href="{{product.image.url}}" class="image-popup"><span
+                                                class="arrow_expand"></span></a></li>
+                                    <li><a href="{% url 'add-to-cart' product.pk %}?path={{path}}"><span class="icon_bag_alt"></span></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6><a href="{% url 'product-detail' product.category|lower product.pk %}">{{product.name}}</a></h6>
+                                <div class="rating">
+                                    {% for rating in product.ratingList %}
+                                    <i class="fa fa-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <div class="product__price"><span><img src="{% static 'main/icons/naira.png' %}" class="naira"></span> {{product.price}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-uppercase font-italic font-weight-bold">No products in the shop yet</p>
+                    {% endfor %}
+                    <div class="col-lg-12 text-center">
+                        <div class="pagination__option">
+                            {% if is_paginated %}
+                            {% if page_obj.has_previous %}
+                            <a class="" href="?page=1">first</a>
+                            <a class=""
+                                href="?page={{page_obj.previous_page_number}}">prev</a>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <a class="" href="?page={{num}}">{{num}}</a>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} 
+                            <a class="" href="?page={{num}}">{{num}}</a>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <a class="" href="?page={{page_obj.next_page_number}}">next</a>
+                            <a class="" href="?page={{page_obj.paginator.num_pages}}">last</a>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Section End -->
+{% endblock main_content %}

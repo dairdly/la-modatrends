@@ -1,0 +1,16 @@
+.logo {
+    font-size: 3rem;
+    font-family: "Cookie", cursive;
+    color: #000000
+    
+}
+
+.product__details__widget .share_text {
+    font-size: 3rem;
+	font-family: "Cookie", cursive;
+}
+
+.naira {
+    width: 1rem;
+    margin-top: -4px;
+}
